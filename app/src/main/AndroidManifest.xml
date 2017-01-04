@@ -29,11 +29,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!--网易云捕APPID-->
-        <meta-data
-            android:name="BUGRPT_APPID"
-            android:value=""/>
-
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

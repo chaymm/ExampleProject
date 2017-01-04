@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 23
     buildToolsVersion "24.0.0"
+    useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "com.example.exampleproject"
@@ -10,17 +11,88 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         ndk{
             abiFilters "armeabi","armeabi-v7a","x86","arm64-v8a","x86_64"
         }
     }
     buildTypes {
         release {
+            // 不显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            //混淆
             minifyEnabled false
+            //Zipalign优化
+            zipAlignEnabled true
+            // 移除无用的resource文件
+            // shrinkResources true
+            //加载默认混淆配置文件 progudard-android.txt在sdk目录里面
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
         }
     }
-    useLibrary 'org.apache.http.legacy'
+
+//    dexOptions {
+//        javaMaxHeapSize "1g"
+//    }
+
+    //执行lint检查，有任何的错误或者警告提示，都会终止构建，我们可以将其关掉。
+    lintOptions {
+        abortOnError false
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+            java.srcDirs = ['src/main/java']
+            jniLibs.srcDirs = ['libs']
+            /* resources.srcDirs = ['src/main/res']
+             aidl.srcDirs = ['src']
+             renderscript.srcDirs = ['src']*/
+            res.srcDirs = ['src/main/res']
+            assets.srcDirs = ['src/main/assets']
+        }
+        // Move the tests to tests/java, tests/res, etc...
+        instrumentTest.setRoot('tests')
+        // Move the build types to build-types/<type>
+        // For instance, build-types/debug/java, build-types/debug/AndroidManifest.xml, ...
+        // This moves them out of them default location under src/<type>/... which would
+        // conflict with src/ being used by the main source set.
+        // Adding new build types or product flavors should be accompanied
+        // by a similar customization.
+        debug.setRoot('build-types/debug')
+        release.setRoot('build-types/release')
+        /* GooglePlay{                 //设置GooglePlay 渠道的配置文件位置
+             manifest.srcFile 'src/main/googlePlay/AndroidManifest.xml'
+         }
+          xiaomi {
+              manifest.srcFile 'AndroidManifest.xml'
+          }
+          umeng {
+              manifest.srcFile 'AndroidManifest.xml'
+          }*/
+    }
+
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_1_7
+//        targetCompatibility JavaVersion.VERSION_1_7
+//    }
+
+    //修改生成的apk默认名称
+    android.applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                //这里修改apk文件名
+                def fileName = outputFile.name.replace("app-release","app_v${defaultConfig.versionName}_${releaseTime()}")
+                output.outputFile = new File(outputFile.parent, fileName)
+            }
+        }
+    }
+}
+
+def releaseTime() {
+    return new Date().format("yyyyMMdd")
 }
 
 dependencies {
@@ -29,7 +101,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.android.support:recyclerview-v7:23.4.0'
-    compile 'com.netease.nis.plugin:bugrpt:latest.release'//网易云捕
     compile 'com.github.navasmdc:MaterialDesign:1.5@aar'//https://github.com/navasmdc/MaterialDesignLibrary
     compile 'com.afollestad.material-dialogs:core:0.9.0.1'//https://github.com/afollestad/material-dialogs
 }
