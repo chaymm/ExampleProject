@@ -50,7 +50,7 @@ import com.google.gson.reflect.TypeToken;
  * String sUserList3 = JSONUtils.toJson(userList, targetType, 1.0d, true);
  * sUserList3 ----> [{"uname":"jack","sex":"Male"},{"uname":"marry","sex":"Female"}]
 **/
-public class GDCAJsonUtils {
+public class JsonUtils {
 
 //	private static final Log log = LogFactory.getLog(JsonUtils.class);  
     public static final String EMPTY = "";  

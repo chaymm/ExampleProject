@@ -15,20 +15,20 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class GDCACameraUtil {
+public class CameraUtil {
     //降序
     private CameraDropSizeComparator dropSizeComparator = new CameraDropSizeComparator();
     //升序
     private CameraAscendSizeComparator ascendSizeComparator = new CameraAscendSizeComparator();
-    private static GDCACameraUtil myCamPara = null;
+    private static CameraUtil myCamPara = null;
 
-    private GDCACameraUtil() {
+    private CameraUtil() {
 
     }
 
-    public static GDCACameraUtil getInstance() {
+    public static CameraUtil getInstance() {
         if (myCamPara == null) {
-            myCamPara = new GDCACameraUtil();
+            myCamPara = new CameraUtil();
             return myCamPara;
         } else {
             return myCamPara;
