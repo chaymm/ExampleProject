@@ -3,7 +3,7 @@ package com.example.exampleproject.app;
 import android.app.Application;
 
 import com.loopj.android.http.PersistentCookieStore;
-import com.netease.nis.bugrpt.CrashHandler;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import org.apache.http.client.CookieStore;
 
@@ -17,7 +17,7 @@ public class MyApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		CrashHandler.init(getApplicationContext());
+		CrashReport.initCrashReport(getApplicationContext(), "900057416", false,null);
 	}
 
 	public CookieStore getuCookie() {
