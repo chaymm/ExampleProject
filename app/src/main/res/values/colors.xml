@@ -462,4 +462,11 @@
     <color name="color_DarkRed">#8B0000</color>
     <color name="color_LightGreen">#90EE90</color>
 
+    <!--zxing-->
+    <color name="color_c0ffbd21">#c0ffbd21</color>
+    <color name="color_c099cc00">#c099cc00</color>
+    <color name="color_b0000000">#b0000000</color>
+    <color name="color_ffcc0000">#ffcc0000</color>
+    <color name="color_60000000">#60000000</color>
+
 </resources>

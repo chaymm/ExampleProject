@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="id_zxing_decode" type="id"/>
+    <item name="id_zxing_decode_failed" type="id"/>
+    <item name="id_zxing_decode_succeeded" type="id"/>
+    <item name="id_zxing_launch_product_query" type="id"/>
+    <item name="id_zxing_quit" type="id"/>
+    <item name="id_zxing_restart_preview" type="id"/>
+    <item name="id_zxing_return_scan_result" type="id"/>
+
+</resources>

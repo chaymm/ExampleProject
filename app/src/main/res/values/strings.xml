@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">ExampleProject</string>
+
+    <!--权限-->
+    <string name="dialog_title_permission">应用权限申请</string>
+    <string name="dialog_content_permission">本应用需要获取允许读取电话状态和写入外部存储权限</string>
+    <string name="btn_cancel">取消</string>
+    <string name="btn_setting">设置</string>
 </resources>
