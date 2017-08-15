@@ -1,9 +1,59 @@
 #---------------------------------定制化区域---------------------------
 #--------------------------1.实体类-----------------------------------
-
+-keep class com.nhgaohe.secondhandcar_android.data.model.**{*;}
 
 #--------------------------2.第三方包----------------------------------
+#bugly
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
 
+#muppdf
+-dontwarn com.artifex.**
+-keep class com.artifex.mupdfdemo.** { *; }
+
+#floatingGroupExpandableListView
+-dontwarn com.diegocarloslima.fgelv.**
+-keep class com.diegocarloslima.fgelv.** { *; }
+
+#gson,zxing
+-dontwarn com.google.**
+-keep class com.google.** { *; }
+
+#glide
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+
+#okhttp
+-dontwarn okhttp3.**
+-keep class okhttp3.**{*;}
+
+-keepattributes SourceFile,LineNumberTable
+-keep class com.parse.*{ *; }
+-dontwarn com.parse.**
+-dontwarn com.squareup.picasso.**
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+#okio
+-dontwarn okio.**
+-keep class okio.**{*;}
+
+#rxjava
+-dontwarn sun.misc.**
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+ long producerIndex;
+ long consumerIndex;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+ rx.internal.util.atomic.LinkedQueueNode producerNode;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
+ rx.internal.util.atomic.LinkedQueueNode consumerNode;
+}
 
 #--------------------------3.与js互相调用的类----------------------------
 
