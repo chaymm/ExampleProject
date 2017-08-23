@@ -1,6 +1,7 @@
 package com.example.exampleproject.base.activity;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -17,6 +18,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.exampleproject.R;
 import com.example.exampleproject.base.BaseApplication;
 import com.example.exampleproject.util.IntentUtil;
+import com.example.exampleproject.util.SystemBarTintManager;
 
 /**
  * Created by chang on 2017/2/7.
@@ -164,6 +166,17 @@ public abstract class BaseActivity extends BasePermissionActivity {
     }
 
     /**
+     * 初始化窗口管理
+     */
+    public void initWindow() {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+            SystemBarTintManager systemBarTintManager = new SystemBarTintManager(this);
+            systemBarTintManager.setStatusBarTintEnabled(true);
+            systemBarTintManager.setStatusBarTintResource(R.color.colorPrimaryDark);
+        }
+    }
+
+    /**
      * 分发处理点击事件，隐藏键盘
      */
     @Override
@@ -260,11 +273,6 @@ public abstract class BaseActivity extends BasePermissionActivity {
      * @return
      */
     protected abstract int getLayoutId();
-
-    /**
-     * 初始化窗口管理
-     */
-    protected abstract void initWindow();
 
     /**
      * 初始化控件

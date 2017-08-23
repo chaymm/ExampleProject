@@ -1,6 +1,6 @@
 #---------------------------------定制化区域---------------------------
 #--------------------------1.实体类-----------------------------------
--keep class com.nhgaohe.secondhandcar_android.data.model.**{*;}
+
 
 #--------------------------2.第三方包----------------------------------
 #bugly
@@ -42,18 +42,21 @@
 -dontwarn okio.**
 -keep class okio.**{*;}
 
-#rxjava
--dontwarn sun.misc.**
--keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
- long producerIndex;
- long consumerIndex;
-}
--keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
- rx.internal.util.atomic.LinkedQueueNode producerNode;
-}
--keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
- rx.internal.util.atomic.LinkedQueueNode consumerNode;
-}
+#rxjava rxAndroid1.0
+#-dontwarn sun.misc.**
+#-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+# long producerIndex;
+# long consumerIndex;
+#}
+#-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+# rx.internal.util.atomic.LinkedQueueNode producerNode;
+#}
+#-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
+# rx.internal.util.atomic.LinkedQueueNode consumerNode;
+#}
+
+#rxlifecycle2
+-dontwarn javax.annotation.**
 
 #--------------------------3.与js互相调用的类----------------------------
 

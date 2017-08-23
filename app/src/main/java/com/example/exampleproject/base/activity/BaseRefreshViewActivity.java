@@ -26,11 +26,6 @@ public abstract class BaseRefreshViewActivity extends BaseActivity {
     }
 
     @Override
-    protected void initWindow() {
-
-    }
-
-    @Override
     protected void initWidget() {
         mSwipeRefreshLayout = getViewById(R.id.swipeRefreshLayout);
     }

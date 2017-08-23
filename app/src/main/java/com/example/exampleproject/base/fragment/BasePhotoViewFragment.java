@@ -5,7 +5,7 @@ import android.view.View;
 
 import com.example.exampleproject.R;
 import com.example.exampleproject.base.adapter.BasePhotoViewAdapter;
-import com.example.exampleproject.base.view.HackyViewPager;
+import com.example.exampleproject.base.view.XViewPager;
 
 
 /**
@@ -15,7 +15,7 @@ import com.example.exampleproject.base.view.HackyViewPager;
 
 public abstract class BasePhotoViewFragment extends BaseFragment {
 
-    protected HackyViewPager mViewPager;
+    protected XViewPager mViewPager;
 
     @Override
     protected void getBundleData(Bundle bundle) {

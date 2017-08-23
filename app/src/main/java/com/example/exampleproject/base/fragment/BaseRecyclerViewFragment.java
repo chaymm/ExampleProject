@@ -12,14 +12,13 @@ import com.example.exampleproject.base.view.pullrecyclerview.layoutmanager.ILayo
 
 
 /**
- * 上拉刷新下拉更多RecylerView Fragment基类
+ * 上拉刷新下拉更多RecyclerView Fragment基类
  * Created by chang on 2017/2/27.
  */
 
 public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implements BaseRecyclerAdapter.OnRecyclerItemClickListener, BaseRecyclerAdapter.OnRecyclerItemLongClickListener {
 
     protected PullRecyclerView mPullToRefreshRecyclerView;
-    protected BaseRecyclerAdapter mAdapter;
 
     @Override
     protected void getBundleData(Bundle bundle) {
@@ -56,10 +55,6 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
      * 设置适配器
      */
     protected void setAdapter() {
-//        if (mAdapter != null) {
-//            mAdapter.notifyDataSetChanged();
-//            return;
-//        }
         mPullToRefreshRecyclerView.setColorSchemeResources(R.color.colorPrimary);
         mPullToRefreshRecyclerView.setLayoutManager(getLayoutManager());
         if (getItemDecoration() == null) {
@@ -78,7 +73,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
                 onLoadMore();
             }
         });
-        mAdapter = getRecyclerAdapter();
+        BaseRecyclerAdapter mAdapter = getRecyclerAdapter();
         mAdapter.setOnRecyclerItemClickListener(this);
         mAdapter.setOnRecyclerItemLongClickListener(this);
         mPullToRefreshRecyclerView.setAdapter(mAdapter);

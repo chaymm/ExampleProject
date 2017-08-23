@@ -3,7 +3,7 @@ package com.example.exampleproject.module.startup;
 
 import com.example.exampleproject.base.BasePresenter;
 import com.example.exampleproject.base.BaseView;
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 /**
  * 协议接口

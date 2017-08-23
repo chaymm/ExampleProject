@@ -26,11 +26,6 @@ public abstract class BaseRecyclerViewActivity extends BaseActivity implements B
     }
 
     @Override
-    protected void initWindow() {
-
-    }
-
-    @Override
     protected void initWidget() {
         mPullToRefreshRecyclerView = getViewById(R.id.recyclerView);
     }

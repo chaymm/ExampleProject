@@ -3,7 +3,7 @@ package com.example.exampleproject.base.activity;
 import android.support.annotation.NonNull;
 
 import com.example.exampleproject.util.PermissionUtil;
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 
 /**

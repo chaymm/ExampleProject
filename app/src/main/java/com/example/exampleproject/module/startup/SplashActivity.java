@@ -5,7 +5,7 @@ import android.os.Bundle;
 import com.example.exampleproject.R;
 import com.example.exampleproject.base.activity.BaseActivity;
 import com.example.exampleproject.util.SystemUtil;
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 /**
  * 启动界面
@@ -27,11 +27,6 @@ public class SplashActivity extends BaseActivity implements SplashContract.View{
     }
 
     @Override
-    protected void initWindow() {
-        SystemUtil.setFullScreen(this);
-    }
-
-    @Override
     protected void initWidget() {
 
     }
@@ -45,6 +40,11 @@ public class SplashActivity extends BaseActivity implements SplashContract.View{
     protected void onGrantedPermission() {
         super.onGrantedPermission();
         mPresenter.timer();
+    }
+
+    @Override
+    public void initWindow() {
+        SystemUtil.setFullScreen(this);
     }
 
     @Override

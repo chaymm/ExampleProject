@@ -8,7 +8,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
+
+import com.example.exampleproject.BuildConfig;
 
 import java.io.File;
 
@@ -112,6 +116,35 @@ public class IntentUtil {
             Log.e(TAG, "there is no activity can handle this intent: "
                     + intent.getAction().toString());
         }
+    }
+
+    /**
+     * 跳转界面(回调)
+     * @param activity
+     * @param cls
+     * @param bundle
+     * @param requestCode
+     */
+    public static void startActivityForResult(Activity activity, Class<?> cls,
+                                     Bundle bundle,int requestCode) {
+        Intent intent = new Intent(activity, cls);
+        intent.putExtras(bundle);
+        activity.startActivityForResult(intent,requestCode);
+    }
+
+    /**
+     * 回调结果到界面
+     * @param activity
+     * @param cls
+     * @param bundle
+     * @param resultCode
+     */
+    public static void setResult(Activity activity, Class<?> cls,
+                                              Bundle bundle,int resultCode) {
+        Intent intent = new Intent(activity, cls);
+        if(bundle != null)
+            intent.putExtras(bundle);
+        activity.setResult(resultCode,intent);
     }
 
     /**
@@ -223,8 +256,18 @@ public class IntentUtil {
      * @param context
      */
     public static void intentWifiSetting(Context context) {
-        Intent wifiSettingsIntent = new Intent("android.settings.WIFI_SETTINGS");
-        context.startActivity(wifiSettingsIntent);
+        Intent intent = new Intent("android.settings.WIFI_SETTINGS");
+        context.startActivity(intent);
+    }
+
+    /**
+     * 显示蓝牙设置界面
+     *
+     * @param context
+     */
+    public static void intentBluetooth(Context context) {
+        Intent intent = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+        context.startActivity(intent);
     }
 
     /**
@@ -432,36 +475,62 @@ public class IntentUtil {
     /**
      * 打开系统照相机拍照
      *
-     * @param requestcode 返回值
+     * @param requestCode 返回值
      * @param activity    上下文
      * @param fileName    生成的图片文件的路径
      */
-    public static void intentTakePhoto(int requestcode, Activity activity, String fileName) {
+    public static void intentTakePhoto(int requestCode, Activity activity, String fileName) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.addCategory("android.intent.category.DEFAULT");
-        try {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Uri uri = FileProvider.getUriForFile(activity, BuildConfig.APPLICATION_ID +".fileProvider", new File(fileName));
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        } else {
+            intent.addCategory("android.intent.category.DEFAULT");
             Uri uri = Uri.fromFile(new File(fileName));
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-            activity.startActivityForResult(intent, requestcode);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+        activity.startActivityForResult(intent, requestCode);
+    }
+
+    /**
+     * 打开系统照相机拍照(可携带数据)
+     *
+     * @param requestCode 返回值
+     * @param activity    上下文
+     * @param fileName    生成的图片文件的路径
+     * @param bundle    可携带的数据
+     */
+    public static void intentTakePhoto(int requestCode, Activity activity, String fileName , Bundle bundle) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Uri uri = FileProvider.getUriForFile(activity, BuildConfig.APPLICATION_ID +".fileProvider", new File(fileName));
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+            intent.putExtras(bundle);
+        } else {
+            intent.addCategory("android.intent.category.DEFAULT");
+            Uri uri = Uri.fromFile(new File(fileName));
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+            intent.putExtras(bundle);
+        }
+        activity.startActivityForResult(intent, requestCode);
     }
 
     /**
      * 打开系统照相机录像
      *
-     * @param requestcode 返回值
+     * @param requestCode 返回值
      * @param activity    上下文
      * @param fileName    生成的视频文件的路径
      */
-    public static void intentTakeVideo(int requestcode, Activity activity, String fileName) {
+    public static void intentTakeVideo(int requestCode, Activity activity, String fileName) {
         Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         intent.addCategory("android.intent.category.DEFAULT");
         try {
             Uri uri = Uri.fromFile(new File(fileName));
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-            activity.startActivityForResult(intent, requestcode);
+            activity.startActivityForResult(intent, requestCode);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -474,29 +543,18 @@ public class IntentUtil {
      * @param file    APK文件
      */
     public static void intentInstallApk(Context context, File file) {
-        Intent intent = new Intent();
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(file),
-                "application/vnd.android.package-archive");
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        //判断是否是AndroidN以及更高的版本
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri contentUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID +".fileProvider", file);
+            intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+        } else {
+            intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
         context.startActivity(intent);
     }
-
-
-    /**
-     * 安装apk
-     *
-     * @param context 上下文
-     * @param file    APK文件uri
-     */
-    public static void intentInstallApk(Context context, Uri file) {
-        Intent intent = new Intent();
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(file, "application/vnd.android.package-archive");
-        context.startActivity(intent);
-    }
-
 
     /**
      * 卸载apk
@@ -510,4 +568,17 @@ public class IntentUtil {
         intent.setData(packageURI);
         context.startActivity(intent);
     }
+
+    /**
+     * 获取指定包名的intent
+     *
+     * @param context     上下文
+     * @param packageName 包名
+     * @return
+     */
+    public static Intent getLaunchIntentForPackage(Context context, String packageName) {
+        return context.getPackageManager().getLaunchIntentForPackage(packageName);
+    }
+
+
 }

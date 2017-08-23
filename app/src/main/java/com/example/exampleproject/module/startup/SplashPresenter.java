@@ -4,9 +4,10 @@ import android.content.Context;
 
 import java.util.concurrent.TimeUnit;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
 
 /**
  * Created by chang on 2017/3/13.
@@ -33,11 +34,11 @@ public class SplashPresenter implements SplashContract.Presenter {
     public void timer() {
         Observable.timer(1, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<Long, Object>() {
+                .map(new Function<Long, Object>() {
                     @Override
-                    public Object call(Long aLong) {
+                    public Object apply(@NonNull Long aLong) throws Exception {
                         mView.toLogin();
-                        return null;
+                        return 0;
                     }
                 })
                 .subscribe();

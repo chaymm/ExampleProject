@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import com.example.exampleproject.base.view.FloatView;
 import com.example.exampleproject.util.DensityUtil;
 import com.example.exampleproject.util.ScreenUtil;
-import com.trello.rxlifecycle.components.RxDialogFragment;
+import com.trello.rxlifecycle2.components.RxDialogFragment;
 
 /**
  * DialogFragment基类

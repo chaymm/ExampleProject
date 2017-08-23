@@ -10,8 +10,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-import com.example.exampleproject.R;
-
+import com.nhgaohe.secondhandcar_android.R;
 
 /**
  * 带焦点分发事件处理的Dialog基类

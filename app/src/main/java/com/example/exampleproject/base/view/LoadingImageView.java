@@ -10,6 +10,7 @@ import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
 /**
@@ -17,7 +18,7 @@ import android.util.AttributeSet;
  * Created by ran on 2017/4/10.
  */
 
-public class LoadingImageView extends android.support.v7.widget.AppCompatImageView{
+public class LoadingImageView extends AppCompatImageView {
 
     /**
      * 上下文

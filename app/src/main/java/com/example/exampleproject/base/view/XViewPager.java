@@ -9,13 +9,13 @@ import android.view.MotionEvent;
  * ViewPager用于缩放图片
  * Created by chang on 2017/2/9.
  */
-public class HackyViewPager extends ViewPager {
+public class XViewPager extends ViewPager {
 
-    public HackyViewPager(Context context) {
+    public XViewPager(Context context) {
         super(context);
     }
 
-    public HackyViewPager(Context context, AttributeSet attrs) {
+    public XViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 

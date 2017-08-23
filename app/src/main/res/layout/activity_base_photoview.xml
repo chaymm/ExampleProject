@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.example.exampleproject.base.view.HackyViewPager
+<com.example.exampleproject.base.view.XViewPager
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/viewPager_photoView"
     android:background="@color/color_black"

@@ -1,11 +1,13 @@
 package com.example.exampleproject.base.activity;
 
 
+import android.os.Build;
 import android.support.v4.view.ViewPager;
 
 import com.example.exampleproject.R;
 import com.example.exampleproject.base.adapter.BasePagerAdapter;
-import com.example.exampleproject.base.view.HackyViewPager;
+import com.example.exampleproject.base.view.XViewPager;
+import com.example.exampleproject.util.SystemBarTintManager;
 
 
 /**
@@ -15,16 +17,11 @@ import com.example.exampleproject.base.view.HackyViewPager;
 
 public abstract class BasePhotoViewActivity extends BaseActivity {
 
-    protected HackyViewPager mViewPager;
+    protected XViewPager mViewPager;
 
     @Override
     protected int getLayoutId() {
         return R.layout.activity_base_photoview;
-    }
-
-    @Override
-    protected void initWindow() {
-
     }
 
     @Override
@@ -52,6 +49,15 @@ public abstract class BasePhotoViewActivity extends BaseActivity {
                 onViewPageScrollStateChanged(state);
             }
         });
+    }
+
+    @Override
+    public void initWindow() {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+            SystemBarTintManager systemBarTintManager = new SystemBarTintManager(this);
+            systemBarTintManager.setStatusBarTintEnabled(true);
+            systemBarTintManager.setStatusBarTintResource(R.color.color_black);
+        }
     }
 
     /**

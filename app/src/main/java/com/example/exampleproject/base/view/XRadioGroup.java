@@ -11,14 +11,14 @@ import android.widget.RadioGroup;
  * 默认水平开始排布
  * Created by mjc on 2016/1/20.
  */
-public class RadioGroupEx extends RadioGroup {
-    private static final String TAG = "RadioGroupEx";
+public class XRadioGroup extends RadioGroup {
+    private static final String TAG = "XRadioGroup";
 
-    public RadioGroupEx(Context context) {
+    public XRadioGroup(Context context) {
         super(context);
     }
 
-    public RadioGroupEx(Context context, AttributeSet attrs) {
+    public XRadioGroup(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
