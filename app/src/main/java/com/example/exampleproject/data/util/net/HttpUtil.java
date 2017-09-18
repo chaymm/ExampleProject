@@ -1,22 +1,15 @@
 package com.example.exampleproject.data.util.net;
 
-import android.graphics.Bitmap;
 
 import com.example.exampleproject.data.util.net.okhttp.OkHttpUtil;
 import com.example.exampleproject.data.util.net.okhttp.callback.BitmapCallback;
 import com.example.exampleproject.data.util.net.okhttp.callback.FileCallback;
 import com.example.exampleproject.data.util.net.okhttp.callback.StringCallback;
-import com.example.exampleproject.data.util.net.okhttp.convert.BitmapConvert;
-import com.example.exampleproject.data.util.net.okhttp.convert.FileConvert;
-import com.example.exampleproject.data.util.net.okhttp.convert.StringConvert;
-import com.example.exampleproject.data.util.net.okhttp.okrx.RxAdapter;
 import com.example.exampleproject.data.util.net.okhttp.request.GetRequest;
 import com.example.exampleproject.data.util.net.okhttp.request.PostRequest;
 
 import java.io.File;
 import java.util.Map;
-
-import rx.Observable;
 
 /**
  * http请求工具类
@@ -50,16 +43,8 @@ public class HttpUtil {
         OkHttpUtil.getInstance().cancelAll();
     }
 
-    public void post(String url, Map<String, String> params, StringCallback callback) {
-        PostRequest postRequest = OkHttpUtil.post(url);
-        postRequest.tag(this);
-        if (params != null) {
-            for (String key : params.keySet()) {
-                String param = params.get(key);
-                postRequest.params(key, param);
-            }
-        }
-        postRequest.execute(callback);
+    public void post(String url, Map<String, String> headers, Map<String, Object> params, StringCallback callback) {
+        getPostRequest(url, headers, params).execute(callback);
     }
 
     public void post(String url, String data, StringCallback callback) {
@@ -69,52 +54,20 @@ public class HttpUtil {
                 .execute(callback);
     }
 
-    public Observable<String> post(String url, Map<String, String> params) {
-        PostRequest postRequest = OkHttpUtil.post(url);
-        postRequest.tag(this);
-        if (params != null) {
-            for (String key : params.keySet()) {
-                String param = params.get(key);
-                postRequest.params(key, param);
-            }
-        }
-        return postRequest.getCall(StringConvert.create(), RxAdapter.<String>create());
+//    public Observable<String> post(String url, Map<String, String> headers, Map<String, Object> params) {
+//        return getPostRequest(url, headers, params).getCall(StringConvert.create(), RxAdapter.<String>create());
+//    }
+
+    public void get(String url, Map<String, String> headers, Map<String, Object> params, StringCallback callback) {
+        getGetRequest(url, headers, params).execute(callback);
     }
 
-    public void get(String url, Map<String, String> params, StringCallback callback) {
-        GetRequest getRequest = OkHttpUtil.get(url);
-        getRequest.tag(this);
-        if (params != null) {
-            for (String key : params.keySet()) {
-                String param = params.get(key);
-                getRequest.params(key, param);
-            }
-        }
-        getRequest.execute(callback);
-    }
+//    public Observable<String> get(String url, Map<String, String> headers, Map<String, Object> params) {
+//        return getGetRequest(url, headers, params).getCall(StringConvert.create(), RxAdapter.<String>create());
+//    }
 
-    public Observable<String> get(String url, Map<String, String> params) {
-        GetRequest getRequest = OkHttpUtil.get(url);
-        getRequest.tag(this);
-        if (params != null) {
-            for (String key : params.keySet()) {
-                String param = params.get(key);
-                getRequest.params(key, param);
-            }
-        }
-        return getRequest.getCall(StringConvert.create(), RxAdapter.<String>create());
-    }
-
-    public void getBitmap(String url,Map<String, String> params, BitmapCallback callback) {
-        GetRequest getRequest = OkHttpUtil.get(url);
-        getRequest.tag(this);
-        if (params != null) {
-            for (String key : params.keySet()) {
-                String param = params.get(key);
-                getRequest.params(key, param);
-            }
-        }
-        getRequest.execute(callback);
+    public void getBitmap(String url, Map<String, String> headers, Map<String, Object> params, BitmapCallback callback) {
+        getGetRequest(url, headers, params).execute(callback);
     }
 
     public void getBitmap(String url, BitmapCallback callback) {
@@ -123,42 +76,48 @@ public class HttpUtil {
                 .execute(callback);
     }
 
-    public Observable<Bitmap> getBitmap(String url) {
-        return OkHttpUtil.get(url)
-                .tag(this)
-                .getCall(BitmapConvert.create(), RxAdapter.<Bitmap>create());
+//    public Observable<Bitmap> getBitmap(String url) {
+//        return OkHttpUtil.get(url)
+//                .tag(this)
+//                .getCall(BitmapConvert.create(), RxAdapter.<Bitmap>create());
+//    }
+
+    public void downloadFileByGet(String url, Map<String, String> headers, Map<String, Object> params, FileCallback callback) {
+        getGetRequest(url, headers, params).execute(callback);
     }
 
-    public void downloadFile(String url, Map<String, String> params, FileCallback callback) {
+    public void downloadFileByPost(String url, Map<String, String> headers, Map<String, Object> params, FileCallback callback) {
+        getPostRequest(url, headers, params).execute(callback);
+    }
+
+//    public Observable<File> downloadFileByPost(String url, Map<String, String> headers, Map<String, Object> params) {
+//        return getPostRequest(url, headers, params).getCall(new FileConvert(), RxAdapter.<File>create());
+//    }
+
+    public void postByJson(String url, Map<String, String> headers, String json, StringCallback callback) {
         PostRequest postRequest = OkHttpUtil.post(url);
         postRequest.tag(this);
-        if (params != null) {
-            for (String key : params.keySet()) {
-                String param = params.get(key);
-                postRequest.params(key, param);
+        if (headers != null) {
+            for (String key : headers.keySet()) {
+                String param = headers.get(key);
+                postRequest.headers(key, param);
             }
+        }
+        if (json != null) {
+            postRequest.upJson(json);
         }
         postRequest.execute(callback);
     }
 
-    public Observable<File> downloadFile(String url, Map<String, String> params) {
+    private PostRequest getPostRequest(String url, Map<String, String> headers, Map<String, Object> params) {
         PostRequest postRequest = OkHttpUtil.post(url);
         postRequest.tag(this);
-        if (params != null) {
-            for (String key : params.keySet()) {
-                String param = params.get(key);
-                postRequest.params(key, param);
+        if (headers != null) {
+            for (String key : headers.keySet()) {
+                String param = headers.get(key);
+                postRequest.headers(key, param);
             }
         }
-        return postRequest.getCall(new FileConvert(), RxAdapter.<File>create());
-    }
-
-    /**
-     * 上传文件
-     */
-    public void uploadFile(String url, Map<String, Object> params, StringCallback callback) {
-        PostRequest postRequest = OkHttpUtil.post(url);
-        postRequest.tag(this);
         if (params != null) {
             for (String param : params.keySet()) {
                 Object object = params.get(param);
@@ -169,24 +128,27 @@ public class HttpUtil {
                 }
             }
         }
-        postRequest.execute(callback);
+        return postRequest;
     }
 
-    public Observable<String> uploadFile(String url, Map<String, Object> params) {
-        PostRequest postRequest = OkHttpUtil.post(url);
-        postRequest.tag(this);
+    private GetRequest getGetRequest(String url, Map<String, String> headers, Map<String, Object> params) {
+        GetRequest getRequest = OkHttpUtil.get(url);
+        getRequest.tag(this);
+        if (headers != null) {
+            for (String key : headers.keySet()) {
+                String param = headers.get(key);
+                getRequest.headers(key, param);
+            }
+        }
         if (params != null) {
             for (String param : params.keySet()) {
                 Object object = params.get(param);
                 if (object instanceof String) {
-                    postRequest.params((String) param, (String) object);
-                } else if (object instanceof File) {
-                    postRequest.params((String) param, (File) object);
+                    getRequest.params((String) param, (String) object);
                 }
             }
         }
-        return postRequest.getCall(StringConvert.create(), RxAdapter.<String>create());
+        return getRequest;
     }
-
 
 }

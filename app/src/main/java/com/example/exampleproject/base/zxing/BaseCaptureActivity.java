@@ -90,16 +90,6 @@ public abstract class BaseCaptureActivity extends BaseActivity implements
 	}
 
 	@Override
-	protected void initWindow() {
-		this.getWindow().addFlags(
-				WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 拍照过程屏幕一直处于高亮
-		hasSurface = false;
-		inactivityTimer = new InactivityTimer(this);
-		beepManager = new BeepManager(this);
-		ambientLightManager = new AmbientLightManager(this);
-	}
-
-	@Override
 	protected void initWidget() {
 
 	}
@@ -157,26 +147,14 @@ public abstract class BaseCaptureActivity extends BaseActivity implements
 		super.onDestroy();
 	}
 
-	/**
-	 * 保存扫描图片
-	 * 
-	 * @param bitmap 扫描图片
-	 * @param result 扫描结果
-	 */
-	private void decodeOrStoreSavedBitmap(Bitmap bitmap, Result result) {
-		if (handler == null) {
-			savedResultToShow = result;
-		} else {
-			if (result != null) {
-				savedResultToShow = result;
-			}
-			if (savedResultToShow != null) {
-				Message message = Message.obtain(handler,
-						R.id.id_zxing_decode_succeeded, savedResultToShow);
-				handler.sendMessage(message);
-			}
-			savedResultToShow = null;
-		}
+	@Override
+	public void initWindow() {
+		this.getWindow().addFlags(
+				WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 拍照过程屏幕一直处于高亮
+		hasSurface = false;
+		inactivityTimer = new InactivityTimer(this);
+		beepManager = new BeepManager(this);
+		ambientLightManager = new AmbientLightManager(this);
 	}
 
 	@Override
@@ -216,6 +194,28 @@ public abstract class BaseCaptureActivity extends BaseActivity implements
 
 		String result = rawResult.getText();
 		onScanResult(result,barcode);
+	}
+
+	/**
+	 * 保存扫描图片
+	 *
+	 * @param bitmap 扫描图片
+	 * @param result 扫描结果
+	 */
+	private void decodeOrStoreSavedBitmap(Bitmap bitmap, Result result) {
+		if (handler == null) {
+			savedResultToShow = result;
+		} else {
+			if (result != null) {
+				savedResultToShow = result;
+			}
+			if (savedResultToShow != null) {
+				Message message = Message.obtain(handler,
+						R.id.id_zxing_decode_succeeded, savedResultToShow);
+				handler.sendMessage(message);
+			}
+			savedResultToShow = null;
+		}
 	}
 
 	/**

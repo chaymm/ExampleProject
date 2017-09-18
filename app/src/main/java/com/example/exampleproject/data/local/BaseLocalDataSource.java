@@ -4,12 +4,14 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.example.exampleproject.data.util.db.DBUtil;
-import com.squareup.sqlbrite.BriteDatabase;
-import com.squareup.sqlbrite.SqlBrite;
+import com.squareup.sqlbrite2.BriteDatabase;
+import com.squareup.sqlbrite2.SqlBrite;
 
-import rx.schedulers.Schedulers;
+import io.reactivex.schedulers.Schedulers;
+
 
 /**
+ * 本地数据源基类
  * Created by chang on 2017/3/3.
  */
 
