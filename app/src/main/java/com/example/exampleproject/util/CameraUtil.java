@@ -9,11 +9,15 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
+import android.media.ExifInterface;
 import android.view.Surface;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import static android.R.attr.id;
 
 public class CameraUtil {
     //降序
@@ -22,20 +26,14 @@ public class CameraUtil {
     private CameraAscendSizeComparator ascendSizeComparator = new CameraAscendSizeComparator();
     private static CameraUtil myCamPara = null;
 
-    private CameraUtil() {
-
-    }
-
     public static CameraUtil getInstance() {
         if (myCamPara == null) {
             myCamPara = new CameraUtil();
-            return myCamPara;
-        } else {
-            return myCamPara;
         }
+        return myCamPara;
     }
 
-    public int getRecorderRotation(int cameraId){
+    public static int getRecorderRotation(int cameraId){
         Camera.CameraInfo info =
                 new Camera.CameraInfo();
         Camera.getCameraInfo(cameraId, info);
@@ -72,7 +70,7 @@ public class CameraUtil {
      * @param cameraId
      * @param camera
      */
-    public void setCameraDisplayOrientation(Activity activity,
+    public static void setCameraDisplayOrientation(Activity activity,
                                                    int cameraId, Camera camera) {
         Camera.CameraInfo info =
                 new Camera.CameraInfo();
@@ -98,10 +96,10 @@ public class CameraUtil {
     }
 
 
-    public Bitmap setTakePicktrueOrientation(int id, Bitmap bitmap) {
+    public static Bitmap setTakePicktrueOrientation(boolean isScale, Bitmap bitmap) {
         Camera.CameraInfo info = new Camera.CameraInfo();
         Camera.getCameraInfo(id, info);
-        bitmap = rotaingImageView(id, info.orientation, bitmap);
+        bitmap = rotateImageView(isScale, info.orientation, bitmap);
         return bitmap;
     }
 
@@ -111,18 +109,48 @@ public class CameraUtil {
      * @param angle 旋转角度
      * @return bitmap 图片
      */
-    public  Bitmap rotaingImageView(int id, int angle, Bitmap bitmap) {
+    public static Bitmap rotateImageView(boolean isScale, int angle, Bitmap bitmap) {
         //旋转图片 动作
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
         //加入翻转 把相机拍照返回照片转正
-        if (id == 1) {
+        if (isScale) {
             matrix.postScale(-1, 1);
         }
         // 创建新的图片
         Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0,
                 bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         return resizedBitmap;
+    }
+
+    /**
+     * 获取原始图片的角度（解决三星手机拍照后图片是横着的问题）
+     * @param path 图片的绝对路径
+     * @return 原始图片的角度
+     */
+    public static int getBitmapDegree(String path) {
+        int degree = 0;
+        try {
+            // 从指定路径下读取图片，并获取其EXIF信息
+            ExifInterface exifInterface = new ExifInterface(path);
+            // 获取图片的旋转信息
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL);
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    degree = 90;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    degree = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    degree = 270;
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return degree;
     }
 
     /**
