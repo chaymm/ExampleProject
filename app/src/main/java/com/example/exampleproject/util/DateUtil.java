@@ -236,4 +236,18 @@ public class DateUtil {
         return 0;
     }
 
+    /**
+     * 毫秒转天小时分秒
+     *
+     * @param mss 毫秒数
+     * @return
+     */
+    public static String formatDuring(long mss) {
+        long days = mss / (1000 * 60 * 60 * 24);
+        long hours = (mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
+        long minutes = (mss % (1000 * 60 * 60)) / (1000 * 60);
+        long seconds = (mss % (1000 * 60)) / 1000;
+        return days + " days " + hours + " hours " + minutes + " minutes " + seconds + " seconds ";
+    }
+
 }

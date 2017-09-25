@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.Date;
 
 /**
  * 文件，文件夹工具类
@@ -129,6 +130,16 @@ public class FileUtil {
             return file.delete();
         }
         return false;
+    }
+
+    /**
+     * 获取文件最后修改时间
+     *
+     * @param file 文件
+     * @return
+     */
+    public static Date getFileModifiedTime(File file) {
+        return new Date(file.lastModified());
     }
 
     /**
@@ -416,6 +427,7 @@ public class FileUtil {
 
     /**
      * Uri转path
+     *
      * @param context
      * @param uri
      * @return
@@ -451,6 +463,7 @@ public class FileUtil {
 
     /**
      * path转Uri
+     *
      * @param filePath
      * @return
      */
@@ -527,7 +540,9 @@ public class FileUtil {
     }
 
     /**
-     * @param uri The Uri to check.
+     * 判断是否外置存储文件
+     *
+     * @param uri 文件URI路径
      * @return Whether the Uri authority is ExternalStorageProvider.
      */
     public static boolean isExternalStorageDocument(Uri uri) {
@@ -535,7 +550,9 @@ public class FileUtil {
     }
 
     /**
-     * @param uri The Uri to check.
+     * 判断是否为下载文件
+     *
+     * @param uri 文件URI路径
      * @return Whether the Uri authority is DownloadsProvider.
      */
     public static boolean isDownloadsDocument(Uri uri) {
@@ -543,7 +560,9 @@ public class FileUtil {
     }
 
     /**
-     * @param uri The Uri to check.
+     * 判断是否为媒体文件
+     *
+     * @param uri 文件URI路径
      * @return Whether the Uri authority is MediaProvider.
      */
     public static boolean isMediaDocument(Uri uri) {
@@ -551,7 +570,9 @@ public class FileUtil {
     }
 
     /**
-     * @param uri The Uri to check.
+     * 判断是否为图片文件
+     *
+     * @param uri 文件UTI路径
      * @return Whether the Uri authority is Google Photos.
      */
     public static boolean isGooglePhotosUri(Uri uri) {
