@@ -26,7 +26,9 @@
     <!--允许应用程序改变网络连接状态-->
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <!--允许应用程序连接配对过的蓝牙设备-->
+    <!-- 允许应用程序连接配对过的蓝牙设备 -->
     <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <!--允许应用程序开机自动运行-->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <!--允许应用程序读取日志-->

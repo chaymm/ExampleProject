@@ -4,7 +4,9 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.util.Log;
 
+import java.lang.reflect.Method;
 import java.util.Set;
 
 /**
@@ -135,9 +137,152 @@ public class BluetoothUtil {
     }
 
     /**
+     * 与设备配对
+     * 参考源码：platform/packages/apps/Settings.git
+     * /Settings/src/com/android/settings/bluetooth/CachedBluetoothDevice.java
+     *
+     * @param btClass
+     * @param btDevice
+     * @return
+     * @throws Exception
+     */
+    public boolean createBond(Class btClass, BluetoothDevice btDevice)
+            throws Exception {
+        Method createBondMethod = btClass.getMethod("createBond");
+        Boolean returnValue = (Boolean) createBondMethod.invoke(btDevice);
+        return returnValue.booleanValue();
+    }
+
+    /**
+     * 与设备解除配对
+     * 参考源码：platform/packages/apps/Settings.git
+     * /Settings/src/com/android/settings/bluetooth/CachedBluetoothDevice.java
+     *
+     * @param btClass
+     * @param btDevice
+     * @return
+     * @throws Exception
+     */
+    public boolean removeBond(Class btClass, BluetoothDevice btDevice)
+            throws Exception {
+        Method removeBondMethod = btClass.getMethod("removeBond");
+        Boolean returnValue = (Boolean) removeBondMethod.invoke(btDevice);
+        return returnValue.booleanValue();
+    }
+
+    /**
+     * 设置密码
+     *
+     * @param btClass
+     * @param btDevice
+     * @param str
+     * @return
+     * @throws Exception
+     */
+    public boolean setPin(Class btClass, BluetoothDevice btDevice,
+                          String str) throws Exception {
+        try {
+            Method removeBondMethod = btClass.getDeclaredMethod("setPin",
+                    new Class[]
+                            {byte[].class});
+            Boolean returnValue = (Boolean) removeBondMethod.invoke(btDevice,
+                    new Object[]
+                            {str.getBytes()});
+            Log.e("returnValue", "" + returnValue);
+        } catch (SecurityException e) {
+            // throw new RuntimeException(e.getMessage());
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            // throw new RuntimeException(e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return true;
+
+    }
+
+    /**
+     * 取消用户输入
+     *
+     * @param btClass
+     * @param device
+     * @return
+     * @throws Exception
+     */
+    public boolean cancelPairingUserInput(Class btClass,
+                                          BluetoothDevice device)
+
+            throws Exception {
+        Method createBondMethod = btClass.getMethod("cancelPairingUserInput");
+        Boolean returnValue = (Boolean) createBondMethod.invoke(device);
+        return returnValue.booleanValue();
+    }
+
+    /**
+     * 取消配对
+     *
+     * @param btClass
+     * @param device
+     * @return
+     * @throws Exception
+     */
+    public boolean cancelBondProcess(Class btClass,
+                                     BluetoothDevice device)
+
+            throws Exception {
+        Method createBondMethod = btClass.getMethod("cancelBondProcess");
+        Boolean returnValue = (Boolean) createBondMethod.invoke(device);
+        return returnValue.booleanValue();
+    }
+
+    /**
+     * 匹配设备
+     * @param strAddress
+     * @param strPsw
+     * @return
+     */
+    public boolean pairBluetooth(String strAddress, String strPsw) {
+        boolean result = false;
+
+        if (!BluetoothAdapter.checkBluetoothAddress(strAddress)) { // 检查蓝牙地址是否有效
+            Log.d("mylog", "devAdd un effient!");
+        }
+
+        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(strAddress);
+
+        if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
+            try {
+                Log.d("mylog", "NOT BOND_BONDED");
+                setPin(device.getClass(), device, strPsw); // 手机和蓝牙采集器配对
+                createBond(device.getClass(), device);
+                result = true;
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                Log.d("mylog", "setPiN failed!");
+                e.printStackTrace();
+            }
+        } else {
+            Log.d("mylog", "HAS BOND_BONDED");
+            try {
+                removeBond(device.getClass(), device);
+                setPin(device.getClass(), device, strPsw); // 手机和蓝牙采集器配对
+                createBond(device.getClass(), device);
+                result = true;
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                Log.d("mylog", "setPiN failed!");
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    /**
      * 释放蓝牙
      */
-    public void release(){
+    public void release() {
         instance = null;
     }
 
