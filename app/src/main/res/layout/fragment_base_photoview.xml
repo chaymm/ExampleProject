@@ -2,6 +2,6 @@
 <com.example.exampleproject.view.XViewPager
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/viewPager_photoview"
-    android:background="@color/color_black"
+    android:background="@color/colorBlack"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />
