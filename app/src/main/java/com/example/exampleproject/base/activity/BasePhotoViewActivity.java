@@ -56,7 +56,7 @@ public abstract class BasePhotoViewActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
             SystemBarTintManager systemBarTintManager = new SystemBarTintManager(this);
             systemBarTintManager.setStatusBarTintEnabled(true);
-            systemBarTintManager.setStatusBarTintResource(R.color.color_black);
+            systemBarTintManager.setStatusBarTintResource(R.color.colorBlack);
         }
     }
 
